@@ -1,1 +1,1 @@
-Project is execution ready... Just download it... and run from ZKP folder(./byfn -m up -l node)
+Download the project and run from ZKP folder(./byfn -m up -l node)
