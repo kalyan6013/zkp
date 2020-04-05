@@ -177,12 +177,13 @@ chaincodeQuery() {
   echo "===================== Querying on peer${PEER}.org${ORG} on channel '$CHANNEL_NAME'... ===================== "
   local rc=1
   local starttime=$(date +%s)
-
   # continue to poll
   # we either get a successful response, or reach TIMEOUT
   while
     test "$(($(date +%s) - starttime))" -lt "$TIMEOUT" -a $rc -ne 0
   do
+    sleep $DELAY
+    sleep $DELAY
     sleep $DELAY
     echo "Attempting to Query peer${PEER}.org${ORG} ...$(($(date +%s) - starttime)) secs"
     set -x
@@ -295,6 +296,10 @@ parsePeerConnectionParameters() {
 # chaincodeInvoke <peer> <org> ...
 # Accepts as many peer/org pairs as desired and requests endorsement from each
 chaincodeInvoke() {
+  sleep $DELAY
+  sleep $DELAY
+  sleep $DELAY
+  sleep $DELAY
   parsePeerConnectionParameters $@
   res=$?
   verifyResult $res "Invoke transaction failed on channel '$CHANNEL_NAME' due to uneven number of peer and org parameters "
@@ -304,12 +309,12 @@ chaincodeInvoke() {
   # it using the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["createCar","vehicleNo", "1239"]}' >&log.txt
+    peer chaincode invoke -o orderer.example.com:7050 -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["queryCar","0001", "1234"]}' >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode invoke -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["createCar","vehivleNo","1239"]}' >&log.txt
+    peer chaincode invoke -o orderer.example.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n mycc $PEER_CONN_PARMS -c '{"Args":["queryCar","0001", "1234"]}' >&log.txt
     res=$?
     set +x
   fi

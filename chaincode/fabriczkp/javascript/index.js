@@ -4,7 +4,7 @@
 
 'use strict';
 
-const Zkp = require('./lib/zkp');
+const Carzkp = require('./lib/carzkp');
 
-module.exports.Zkp = Zkp;
-module.exports.contracts = [ Zkp ];
+module.exports.Carzkp = Carzkp;
+module.exports.contracts = [ Carzkp ];

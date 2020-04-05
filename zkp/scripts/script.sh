@@ -91,22 +91,30 @@ echo "Install chaincode on peer0.org2..."
 installChaincode 0 2
 echo "Install chaincode on peer0.org3..."
 installChaincode 0 3
+# echo "Installing chaincode on peer1.org1..."
+# installChaincode 1 1
+# echo "Installing chaincode on peer1.org2..."
+# installChaincode 1 2
+# echo "Installing chaincode on peer1.org3..."
+# installChaincode 1 3
 
-# Instantiate chaincode on peer0.org2
-echo "Instantiating chaincode on peer0.org2..."
-instantiateChaincode 0 2
+# Instantiate chaincode on peer1.org3
+echo "Instantiating chaincode on peer1.org3..."
+instantiateChaincode 0 3
 
 # Query chaincode on peer0.org1
 # echo "Querying chaincode on peer0.org2..."
 # chaincodeQuery 0 2 0001 1234
 
-# Invoke chaincode on peer0.org1 and peer0.org2
-# echo "Sending invoke transaction on peer0.org1 peer0.org2..."
-# chaincodeInvoke 0 1 0 2
+# Invoke chaincode on peer0.org1, peer0.org2 and peer0.org3
+echo "Sending invoke transaction on peer0.org1 peer0.org2 peer0.org3..."
+# chaincodeInvoke 0 3
 
 ## Install chaincode on peer1.org2
 # echo "Installing chaincode on peer1.org2..."
 # installChaincode 1 2
+
+# chaincodeInvoke 1 2
 
 # Query on chaincode on peer1.org2, check if the result is 90
 # echo "Querying chaincode on peer1.org2..."
