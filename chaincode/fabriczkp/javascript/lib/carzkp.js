@@ -71,55 +71,55 @@ class Carzkp extends Contract {
         
     }
 
-    async createCar(ctx, vehicleNo) {
-        console.info('============= START : Create Car ===========');
+    // async createCar(ctx, vehicleNo) {
+    //     console.info('============= START : Create Car ===========');
 	
-	let vehicleState = await ctx.stub.getState(vehicleNo);
-	if (vehicleState.toString()){
-	   throw new Error('Data already exists: ' + vehicleNo)
-	}
+	// let vehicleState = await ctx.stub.getState(vehicleNo);
+	// if (vehicleState.toString()){
+	//    throw new Error('Data already exists: ' + vehicleNo)
+	// }
 
-	const car = {
-            vehicleNo,
-            docType: 'car',
-        };
+	// const car = {
+    //         vehicleNo,
+    //         docType: 'car',
+    //     };
 
-        await ctx.stub.putState(vehicleNo, Buffer.from(JSON.stringify(car)));
-        console.info('============= END : Create Car ===========');
-	return vehicleNo + " data inserted successfully";
-    }
+    //     await ctx.stub.putState(vehicleNo, Buffer.from(JSON.stringify(car)));
+    //     console.info('============= END : Create Car ===========');
+	// return vehicleNo + " data inserted successfully";
+    // }
    
-    async queryAllCars(ctx) {
-        const startKey = '0001';
-        const endKey = '9999';
+    // async queryAllCars(ctx) {
+    //     const startKey = '0001';
+    //     const endKey = '9999';
 
-        const iterator = await ctx.stub.getStateByRange(startKey, endKey);
+    //     const iterator = await ctx.stub.getStateByRange(startKey, endKey);
 
-        const allResults = [];
-        while (true) {
-            const res = await iterator.next();
+    //     const allResults = [];
+    //     while (true) {
+    //         const res = await iterator.next();
 
-            if (res.value && res.value.value.toString()) {
-                console.log(res.value.value.toString('utf8'));
+    //         if (res.value && res.value.value.toString()) {
+    //             console.log(res.value.value.toString('utf8'));
 
-                const Key = res.value.key;
-                let Record;
-                try {
-                    Record = JSON.parse(res.value.value.toString('utf8'));
-                } catch (err) {
-                    console.log(err);
-                    Record = res.value.value.toString('utf8');
-                }
-                allResults.push({ Key, Record });
-            }
-            if (res.done) {
-                console.log('end of data');
-                await iterator.close();
-                console.info(allResults);
-                return JSON.stringify(allResults);
-            }
-        }
-    }
+    //             const Key = res.value.key;
+    //             let Record;
+    //             try {
+    //                 Record = JSON.parse(res.value.value.toString('utf8'));
+    //             } catch (err) {
+    //                 console.log(err);
+    //                 Record = res.value.value.toString('utf8');
+    //             }
+    //             allResults.push({ Key, Record });
+    //         }
+    //         if (res.done) {
+    //             console.log('end of data');
+    //             await iterator.close();
+    //             console.info(allResults);
+    //             return JSON.stringify(allResults);
+    //         }
+    //     }
+    // }
 }
 
 module.exports = Carzkp;

@@ -1,0 +1,25 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>Welcome to ZKP</h1>
+  <div>
+  <form novalidate #f="ngForm" (ngSubmit)="onRegister(); f.reset()" >
+                        
+    <div class="group">
+      <p id="navlabel">Enter Vehicle Number</p>
+            <input type="text" 
+                class="inputline" 
+                id="vehicleno"    
+                name="vehicleno"
+                [(ngModel)]="car.vehicleno"
+                #userfname="ngModel"
+                minlength="4" 
+                maxlength="25" 
+                required><span class="highlight"></span><span class="bar"></span>
+                
+        </div>
+<hr><br>
+<button  type="submit" class="subbut" [disabled]="f.form.invalid" >Submit</button>
+                 <button  type="reset" class="cancelbut" >Reset</button>
+</form>
+</div>
+
