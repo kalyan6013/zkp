@@ -16,10 +16,10 @@ export class AppComponent {
 
   }
   onRegister(){
-    this.service.onRegister(this.car).subscribe((data:any)=>{
-      console.log(data);
-      this.data = data._body;
-    })
-    // console.log("clicked");
+    // this.service.onRegister(this.car).subscribe((data:any)=>{
+    //   console.log(data);
+    //   this.data = data._body;
+    // })
+    console.log("clicked");
 }
 }
