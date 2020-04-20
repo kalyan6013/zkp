@@ -155,3 +155,6 @@ function varToCurvePovar( x) {
 }
 var a = varToCurvePovar(21);
 console.log("output",a);
+export function makeStruct(){
+    
+}
