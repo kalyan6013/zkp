@@ -2,74 +2,94 @@ import * as alt_bn128 from './alt_bn128.js'
 
 // import {PublicParameters} from "./PublicParameters.sol";
 
-contract EfficientInnerProductVerifier {
-    using alt_bn128 for uint256;
-    using alt_bn128 for alt_bn128.G1Point;
+// contract EfficientInnerProductVerifier {
+    function EfficientInnerProductVerifier(){
+    // using alt_bn128 for uint256;
+    let alt_bn128;
+    // using alt_bn128 for alt_bn128.G1Point;
+    let alt_bn128.G1Point;
 
-    event DebugEvent(uint256 a, uint256 b, uint256 c);
+    // event DebugEvent(uint256 a, uint256 b, uint256 c);
+    DebugEvent(a,b,c);
 
-    uint256 public constant m = 64;
-    uint256 public constant n = 6;
+    // uint256 public constant m = 64;
+    let m=64
+    // uint256 public constant n = 6;
+    let n=6;
 
     PublicParameters public publicParameters;
 
-    function EfficientInnerProductVerifier(
-        address _publicParameters
-    ) public {
+    // function EfficientInnerProductVerifier(
+    //     address _publicParameters
+    // ) public {
+        function EfficientInnerProductVerifier(_publicParameters){
         require(_publicParameters != address(0));
         publicParameters = PublicParameters(_publicParameters);
         require(m == publicParameters.m());
         require(n == publicParameters.n());
     }
 
-    struct Board {
+
+    // struct Board {
+        function Board(){
         alt_bn128.G1Point[m] hs;
         alt_bn128.G1Point H;
         alt_bn128.G1Point c;
         alt_bn128.G1Point l;
         alt_bn128.G1Point r;
-        uint256 x;
-        uint256 xInv;
-        uint256[n] challenges;
-        uint256[m] otherExponents;
+        // uint256 x;
+        let x;
+        // uint256 xInv;
+        let xInv;
+        // uint256[n] challenges;
+        let challenges=[]
+        // uint256[m] otherExponents;
+        let otherExponents =[];
         alt_bn128.G1Point g;
         alt_bn128.G1Point h;
-        uint256 prod;
+        // uint256 prod;
+        let prod;
         alt_bn128.G1Point cProof;
-        bool[m] bitSet;
-        uint256 z;
+        // bool[m] bitSet;
+        let bitSet;
+        // uint256 z;
+        let z;
     }
 
-    function verify(
-        uint256 c_x,
-        uint256 c_y,
-        uint256[2*n] ls,
-        // uint256[n] ls_y,
-        uint256[2*n] rs,
-        // uint256[n] rs_y,
-        uint256 A,
-        uint256 B
-    ) public
-    view 
-    returns (bool) {
+    
+
+    // function verify(uint26 c_x, uint256 c_y, uint256[2*n] ls,
+    //     // uint256[n] ls_y,
+    //     uint256[2*n] rs,
+    //     // uint256[n] rs_y,
+    //     uint256 A,
+    //     uint256 B
+    // ) public
+    // view 
+    // returns (bool)
+    function verify(c_x, c_y, ls, ls_y, rs, rs_y, A, B)
+     {
         return verifyWithCustomParams(alt_bn128.G1Point(c_x, c_y), ls, rs, A, B, publicParameters.gs(), publicParameters.hs(), publicParameters.H());
     }
 
     function verifyWithCustomParams(
         alt_bn128.G1Point c,
-        uint256[2*n] ls,
-        uint256[2*n] rs,
-        uint256 A,
-        uint256 B,
+        // uint256[2*n] ls,
+         ls,
+        // uint256[2*n] rs,
+         rs,
+        // uint256 A,
+         A,
+        // uint256 B,
+        B,
         alt_bn128.G1Point[m] gs,
         alt_bn128.G1Point[m] hs,
         alt_bn128.G1Point H
-    ) public
-    view 
-    returns (bool) {
-        Board memory b;
+    )  {
+        // Board memory b;
+        let b;
         b.c = c;
-        for (uint256 i = 0; i < n; i++) {
+        for ( i = 0; i < n; i++) {
             b.l = alt_bn128.G1Point(ls[2*i], ls[2*i+1]);
             b.r = alt_bn128.G1Point(rs[2*i], rs[2*i+1]);
             b.x = uint256(keccak256(b.l.X, b.l.Y, b.c.X, b.c.Y, b.r.X, b.r.Y)).mod();

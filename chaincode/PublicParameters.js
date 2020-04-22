@@ -1,10 +1,11 @@
-pragma solidity ^0.4.24;
-pragma experimental ABIEncoderV2;
+// pragma solidity ^0.4.24;
+// pragma experimental ABIEncoderV2;
 
-import {alt_bn128} from "./alt_bn128.sol";
-import {Conversion} from "./Conversion.sol";
+import {alt_bn128} from "./alt_bn128.js";
+import {Conversion} from "./Conversion.js";
 
-contract PublicParameters {
+contract 
+function PublicParameters() {
 
     event VectorCreated(uint256 _i);
 

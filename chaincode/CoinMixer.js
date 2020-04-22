@@ -5,7 +5,7 @@
 // import "./SchnorrVerifier.sol";
 import * as alt_bn128 from './alt_bn128.js'
 
-function CoinMixer{
+function CoinMixer(){
 // contract CoinMixer {
     let alt_bn128 = alt_bn128.G1Point;
     let alt_bn128;
@@ -21,8 +21,10 @@ function CoinMixer{
     RangeProofVerifier public rangeProofVerifier;
     TokenProxy public tokenProxy;
 
-    uint256 public constant m = 64;
-    uint256 public constant n = 6;
+    // uint256 public constant m = 64;
+    let m=64;
+    // uint256 public constant n = 6;
+    let n=6;
 
     function CoinMixer(
         address _schnorrVerifier,
@@ -44,20 +46,24 @@ function CoinMixer{
         require(n == rangeProofVerifier.n());
     }
 
-    function deposit(uint256 _assetID, uint256 _value, uint256[2] _publicKey) public payable returns (bool) {
+    // function deposit(uint256 _assetID, uint256 _value, uint256[2] _publicKey) public payable returns (bool) {
+        function deposit( _assetID,  _value,  _publicKey)  {
         require(_assetID == 0 || msg.value == 0);
         require(outputs[_assetID][_publicKey[0]][_publicKey[1]].eq(alt_bn128.G1Point(0, 0)));
         if (_assetID != 0) {
-            address tokenAddress;
-            bool isAuthorized;
+            // address tokenAddress;
+            let tokenAddress;
+            // bool isAuthorized;
+            let isAuthorized;
             (tokenAddress, isAuthorized) = tokenProxy.getTokenInfo(_assetID);
             require(isAuthorized);
             ERC20Token token = ERC20Token(tokenAddress);
             require(token.transferFrom(msg.sender, this, _value));
         }
-        uint256 convertedValue = tokenProxy.convertFromDeposit(_value, _assetID);
+        let convertedValue = tokenProxy.convertFromDeposit(_value, _assetID);
         require(convertedValue < 2**m);
-        alt_bn128.G1Point memory output = publicParameters.G().mul(convertedValue);
+        // alt_bn128.G1Point memory output = publicParameters.G().mul(convertedValue);
+        alt_bn128.G1Point = publicParameters.G().mul(convertedValue);
         outputs[_assetID][_publicKey[0]][_publicKey[1]] = output;
         emit Deposit(_publicKey[0], _publicKey[1], _assetID, convertedValue);
         return true;
@@ -65,18 +71,20 @@ function CoinMixer{
 
 
     function transfer(
-        uint256[2+4+2+4+1] _scalars, // [from_X, from_Y, to_0_X, to_0_Y, to_1_X, to_1_Y, index_0, index_1, schnorr_0_S, schnorr_0_E, schnorr_1_S, schnorr_1_E, assetID]
-        bytes _exchangeData0,
-        bytes _exchangeData1,
+       // uint256[2+4+2+4+1] _scalars, // [from_X, from_Y, to_0_X, to_0_Y, to_1_X, to_1_Y, index_0, index_1, schnorr_0_S, schnorr_0_E, schnorr_1_S, schnorr_1_E, assetID]
+        _scalars,
+         _exchangeData0,
+         _exchangeData1,
         //range proofs
-        uint256[20] coords, // [input_x, input_y, A_x, A_y, S_x, S_y, commits[0]_x, commits[0]_y, commits[1]_x, commits[1]_y]
-        uint256[10] scalars, // [tauX, mu, t, a, b]
-        uint256[2*2*n] ls_coords, // 2 * n
-        uint256[2*2*n] rs_coords  // 2 * n
-    ) public returns (bool success) {
-        alt_bn128.G1Point[] memory reusablePoints = new alt_bn128.G1Point[](3);
+         coords, // [input_x, input_y, A_x, A_y, S_x, S_y, commits[0]_x, commits[0]_y, commits[1]_x, commits[1]_y]
+         scalars, // [tauX, mu, t, a, b]
+         ls_coords, // 2 * n
+         rs_coords  // 2 * n
+    ) {
+        // alt_bn128.G1Point[] memory reusablePoints = new alt_bn128.G1Point[](3);
+        alt_bn128.G1Point = new alt_bn128.G1Point(3)
         reusablePoints[0] = outputs[_scalars[12]][_scalars[0]][_scalars[1]]; // old output
-        bytes32 hashToVerify = keccak256(reusablePoints[0].X, reusablePoints[0].Y);
+        let hashToVerify = keccak256(reusablePoints[0].X, reusablePoints[0].Y);
         reusablePoints[1] = publicParameters.generator(); //signature generator
         reusablePoints[2] = alt_bn128.G1Point(_scalars[0], _scalars[1]); //public key associated with an output
         require(schnorrVerifier.verifySignatureAsPoints(hashToVerify, _scalars[8], _scalars[9], reusablePoints[1], reusablePoints[2]));
@@ -98,14 +106,15 @@ function CoinMixer{
     }
 
     function merge(
-        uint256 _assetID, uint256[2] _publicKey0, uint256[2] _publicKey1,
-        uint256[2] _signature0,
-        uint256[2] _signature1,
-        uint256[2] _newPublicKey) public returns (bool success) {
-        alt_bn128.G1Point[] memory reusablePoints = new alt_bn128.G1Point[](3);
+        _assetID, _publicKey0,  _publicKey1,
+         _signature0,
+         _signature1,
+         _newPublicKey){
+        // alt_bn128.G1Point[] memory reusablePoints = new alt_bn128.G1Point[](3);
+        alt_bn128.G1Point = new alt_bn128.G1Point(3);
 
         reusablePoints[0] = outputs[_assetID][_publicKey0[0]][_publicKey0[1]]; // old output 0
-        bytes32 hashToVerify = keccak256(reusablePoints[0].X, reusablePoints[0].Y);
+        let hashToVerify = keccak256(reusablePoints[0].X, reusablePoints[0].Y);
         reusablePoints[1] = alt_bn128.G1Point(_publicKey0[0], _publicKey0[1]); //public key associated with an output
         require(schnorrVerifier.verifySignatureAsPoints(hashToVerify, _signature0[0], _signature0[1], publicParameters.generator(), reusablePoints[1]));
 
@@ -125,19 +134,19 @@ function CoinMixer{
     }
 
     function verifyRangeProofForSplits(
-        uint256[20] coords, // [input_x, input_y, A_x, A_y, S_x, S_y, commits[0]_x, commits[0]_y, commits[1]_x, commits[1]_y]
-        uint256[10] scalars, // [tauX, mu, t, a, b]
-        uint256[2*2*n] ls_coords, // 2 * n
-        uint256[2*2*n] rs_coords  // 2 * n
-        ) public 
-        view 
-        returns (bool success) {
-            uint256[10] memory scratchForCoords;
-            uint256[5] memory scratchForScalars;
-            uint256[2*n] memory scratchForLs;
-            uint256[2*n] memory scratchForRs;
-            for (uint256 i = 0; i < 2; i++) {
-                uint256 j = 0;
+         coords, // [input_x, input_y, A_x, A_y, S_x, S_y, commits[0]_x, commits[0]_y, commits[1]_x, commits[1]_y]
+         scalars, // [tauX, mu, t, a, b]
+         ls_coords, // 2 * n
+         rs_coords)  // 2 * n 
+        // ) public 
+        // view 
+        // returns (bool success) {
+            let scratchForCoords;
+            let scratchForScalars;
+            let scratchForLs;
+            let scratchForRs;
+            for ( i = 0; i < 2; i++) {
+                 j = 0;
                 for (j = 0; j < scratchForCoords.length; j++) {
                     scratchForCoords[j] = coords[i*10 + j];
                 }
@@ -158,16 +167,20 @@ function CoinMixer{
             return true;
         }
 
-        function withdraw(uint256[2] _publicKey, uint256 _assetID, uint256 _value, uint256 _blinding) public returns (bool success) {
-        alt_bn128.G1Point storage input = outputs[_assetID][_publicKey[0]][_publicKey[1]];
-        alt_bn128.G1Point memory output = publicParameters.G().mul(_value).add(publicParameters.H().mul(_blinding));
+        function withdraw(_publicKey, _assetID,  _value, _blinding)  {
+        // alt_bn128.G1Point storage input = outputs[_assetID][_publicKey[0]][_publicKey[1]];
+        // alt_bn128.G1Point memory output = publicParameters.G().mul(_value).add(publicParameters.H().mul(_blinding));
+        alt_bn128.G1Point  = outputs[_assetID][_publicKey[0]][_publicKey[1]];
+        alt_bn128.G1Point  = publicParameters.G().mul(_value).add(publicParameters.H().mul(_blinding));
         require(input.eq(output));
-        uint256 convertedValue = tokenProxy.convertForWithdraw(_value, _assetID);
+        let convertedValue = tokenProxy.convertForWithdraw(_value, _assetID);
         delete outputs[_assetID][_publicKey[0]][_publicKey[1]];
         emit Withdraw(msg.sender, _assetID, convertedValue);
         if (_assetID != 0) {
-            address tokenAddress;
-            bool isAuthorized;
+            // address tokenAddress;
+            // bool isAuthorized;
+            let tokenAddress;
+            let isAuthorized;
             (tokenAddress, isAuthorized) = tokenProxy.getTokenInfo(_assetID);
             require(isAuthorized);
             ERC20Token token = ERC20Token(tokenAddress);
