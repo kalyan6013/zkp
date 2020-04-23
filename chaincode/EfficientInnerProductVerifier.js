@@ -13,9 +13,9 @@ import * as alt_bn128 from './alt_bn128.js'
     DebugEvent(a,b,c);
 
     // uint256 public constant m = 64;
-    let m=64
+    const m=64, n=6;
     // uint256 public constant n = 6;
-    let n=6;
+   
 
     PublicParameters public publicParameters;
 
@@ -126,16 +126,20 @@ import * as alt_bn128 from './alt_bn128.js'
         return b.cProof.X == b.c.X && b.cProof.Y == b.c.Y;
     }
 
-    function multiExp(uint256[m] ss, alt_bn128.G1Point[m] gs) internal view returns (alt_bn128.G1Point g) {
+    function multiExp(uint256[m] ss, alt_bn128.G1Point[m] gs) 
+    // internal view returns (alt_bn128.G1Point g)
+     {
         g = gs[0].mul(ss[0]);
-        for (uint256 i = 1; i < m; i++) {
+        for ( i = 1; i < m; i++) {
             g = g.add(gs[i].mul(ss[i]));
         }
     }
 
-    function multiExpInversed(uint256[m] ss, alt_bn128.G1Point[m] hs) internal view returns (alt_bn128.G1Point h) {
+    function multiExpInversed(uint256[m] ss, alt_bn128.G1Point[m] hs) 
+    // internal view returns (alt_bn128.G1Point h) 
+    {
         h = hs[0].mul(ss[m-1]);
-        for (uint256 i = 1; i < m; i++) {
+        for ( i = 1; i < m; i++) {
             h = h.add(hs[i].mul(ss[m-1-i]));
         }
     }

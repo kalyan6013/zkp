@@ -3,15 +3,15 @@
 
 // import "./alt_bn128.sol";
 import * as alt_bn128 from './alt_bn128.js';
-// import {PublicParameters} from "./PublicParameters.sol";
+ import {PublicParameters} from "./PublicParameters.js";
 
 function SchnorrVerifier() {
     let alt_bn128;
     // using alt_bn128 for alt_bn128.G1Point;
 
-    constructor() {
+    // constructor() {
 
-    }
+    // }
 
     function verifySignature(
          _hash,
