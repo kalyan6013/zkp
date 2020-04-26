@@ -12,7 +12,8 @@ function RangeProofVerifier() {
     // using alt_bn128 for alt_bn128.G1Point;
     let alt_bn128.G1Point;
     // event DebugEvent(uint256 a, uint256 b, uint256 c);
-    event DebugEvent(a,b,c);
+    // event
+     DebugEvent(a,b,c);
 
     // uint256 public constant m = 64;
     // uint256 public constant n = 6;
@@ -168,6 +169,7 @@ function RangeProofVerifier() {
         alt_bn128.G1Point[m] memory gs = publicParameters.gs();
         alt_bn128.G1Point[m] memory hs = publicParameters.hs();
         Board memory b;
+        
         b.y = uint256(keccak256(input.X, input.Y, proof.A.X, proof.A.Y, proof.S.X, proof.S.Y)).mod();
         b.ys = powers(b.y);
         b.z = uint256(keccak256(b.y)).mod();
