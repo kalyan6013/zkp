@@ -10,7 +10,7 @@ function RangeProofVerifier() {
     let alt_bn128;
     // using alt_bn128 for uint256;
     // using alt_bn128 for alt_bn128.G1Point;
-    let alt_bn128.G1Point;
+    let alt_bn128G1Point;
     // event DebugEvent(uint256 a, uint256 b, uint256 c);
     // event
      DebugEvent(a,b,c);
@@ -122,7 +122,7 @@ function RangeProofVerifier() {
       var InnerProductProof = makeStruts("ls,rs,a,b");
     
     // event Proof(uint256 x, uint256 y);
-    event Proof( x,  y);
+     Proof( x,  y);
 
 
     // struct Board {
@@ -157,18 +157,28 @@ function RangeProofVerifier() {
     var Board=makeStruct1("y,z,zSquared,zCubed,x,k,uChallenge,ys=[m],twoTimesZSquared=[m],lhs,rhs,u,p");
 
     function verifyInternal(
-        alt_bn128.G1Point input,
+        // alt_bn128.G1Point input,
+        alt_bn128G1Point = input,
         RangeProof proof
     ) 
     // internal 
     // view 
     // returns (bool) 
     {
-        alt_bn128.G1Point memory G = publicParameters.G();
-        alt_bn128.G1Point memory H = publicParameters.H();
-        alt_bn128.G1Point[m] memory gs = publicParameters.gs();
-        alt_bn128.G1Point[m] memory hs = publicParameters.hs();
-        Board memory b;
+        // alt_bn128.G1Point memory G = publicParameters.G();
+        alt_bn128G1Point = G
+        G = publicParameters.G()
+        alt_bn128G1Point =H
+        //  memory 
+         H = publicParameters.H();
+        alt_bn128G1Point[m] =gs
+        // memory
+         gs = publicParameters.gs();
+        alt_bn128G1Point[m] = hs
+        //  memory 
+         hs = publicParameters.hs();
+        // Board memory b;
+        Board = b;
         
         b.y = uint256(keccak256(input.X, input.Y, proof.A.X, proof.A.Y, proof.S.X, proof.S.Y)).mod();
         b.ys = powers(b.y);
@@ -187,8 +197,11 @@ function RangeProofVerifier() {
         }
         b.uChallenge = uint256(keccak256(proof.tauX, proof.mu, proof.t)).mod();
         b.u = G.mul(b.uChallenge);
-        alt_bn128.G1Point[m] memory hPrimes = haddamard(hs, powers(b.y.inv())); // the most expensive, roughly 64*40000 gas
-        uint256[m] memory hExp = addVectors(times(b.ys, b.z), b.twoTimesZSquared);
+        alt_bn128G1Point[m] = hPrimes
+        // memory 
+        hPrimes = haddamard(hs, powers(b.y.inv())); // the most expensive, roughly 64*40000 gas
+        // uint256[m] memory hExp = addVectors(times(b.ys, b.z), b.twoTimesZSquared);
+        let hExp = addVectors(times(b.ys, b.z), b.twoTimesZSquared);
         b.P = proof.A.add(proof.S.mul(b.x));
         b.P = b.P.add(sumPoints(gs).mul(b.z.neg()));
         b.P = b.P.add(commit(hPrimes, hExp)); // the most expensive, 64*40000
@@ -218,7 +231,9 @@ function RangeProofVerifier() {
         ss=[m])
     //  internal view returns (alt_bn128.G1Point[m] result) 
      {
-    function haddamard(alt_bn128.G1Point[m] ps, ss) i {
+        alt_bn128G1Point[m]= ps
+    // function haddamard(alt_bn128G1Point[m] ps, ss) i {
+        function haddamard(ps, ss){
         for (
             // uint256
              i = 0; i < m; i++) {
